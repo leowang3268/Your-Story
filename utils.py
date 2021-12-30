@@ -5,7 +5,7 @@ from linebot.models import MessageEvent, TextMessage, TextSendMessage
 
 
 channel_access_token = os.getenv(
-    "LINE_CHANNEL_ACCESS_TOKEN", "Eox935kn7K0GcGf49MkjXYgXlpVBcnKMt1tCy4XpQ8vjcriETIcRsD6sSRYicG9Yw2t5CPXoriBFahXT65T7ZzXAH4iVPbQYQ9GD4Kw50HPKOJKW2FVQjxBEunGMmND/bfDiSkEsrHaYtAS/fKH6vi9aMnwsM08hZJmg/xwPJVD=")
+    "LINE_CHANNEL_ACCESS_TOKEN", "Qz7htfBX3N2xPvqqlFCjD/k5sANOj33rgXp/4tNVVFTPUry1BFvQfrvw8dEEzsPp4yTSFtgNkP84seW6BUb8m7kvy1qDVjslDa2pfamLvc6TtS1YuTWYC2rhbyivUNqap8WijQZ5NoMhKJGeV6Tf5AdB04t89/1O/w1cDnyilFU=")
 
 
 def send_text_message(reply_token, text):
