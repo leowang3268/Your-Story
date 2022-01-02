@@ -5,6 +5,7 @@ from utils import send_text_message, send_button_message
 from linebot.models import MessageTemplateAction
 
 # global variable
+to_jail = False
 to_backdoor = False
 to_kitchen = False
 to_hall = False
@@ -40,10 +41,11 @@ class TocMachine(GraphMachine):
     # user start
     def on_enter_user(self):
         # initialize global variables
-        global to_backdoor, to_kitchen, to_hall, explore_kitchen, leave_kitchen, to_sword_room
+        global to_jail, to_backdoor, to_kitchen, to_hall, explore_kitchen, leave_kitchen, to_sword_room
         global to_armor_room, to_bedroom, have_key, explore_bedroom, leave_bedroom, to_outside
         global to_secret_room, wrong_answer, correct_answer, have_sword, have_armor, to_lawn
         global to_gate, to_warehouse, is_dead, is_win, is_restart, score
+        to_jail = False
         to_backdoor = False
         to_kitchen = False
         to_hall = False
@@ -72,8 +74,11 @@ class TocMachine(GraphMachine):
         score = 0
 
     def is_going_to_jail(self, event):
+        global to_jail
         text = event.message.text
-        return text.lower() == "start game" or text == 'leave' or text == 'The door is locked! Return to jail'
+        if text.lower() == "start game" or text == 'leave' or text == 'The door is locked! Return to jail':
+            to_jail = True
+        return to_jail
 
     def on_enter_jail(self, event):
         text = 'which way do you want to go?'

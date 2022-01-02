@@ -256,7 +256,8 @@ def webhook_handler():
         response = machine.advance(event)
         # send_text_message(event.reply_token, "hey")
         if response == False:
-            send_text_message(event.reply_token, "Not Entering any State")
+            send_text_message(event.reply_token,
+                              "Invalid command. Please try again.")
     # print("test")
     # send_text_message(event.reply_token, "hi")
     return "OK"
