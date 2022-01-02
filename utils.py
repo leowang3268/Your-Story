@@ -15,12 +15,11 @@ def send_text_message(reply_token, text):
     return "OK"
 
 
-def send_button_message(reply_token, title, text, btn, url):
+def send_button_message(reply_token, text, btn, url):
     line_bot_api = LineBotApi(channel_access_token)
     message = TemplateSendMessage(
         alt_text='button template',
         template=ButtonsTemplate(
-            title=title,
             text=text,
             thumbnail_image_url=url,
             actions=btn
