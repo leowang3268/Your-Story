@@ -241,8 +241,8 @@ def webhook_handler():
             continue
         if not isinstance(event.message.text, str):
             continue
-        # print(f"\nFSM STATE: {machine.state}")
-        # print(f"REQUEST BODY: \n{body}")
+        print(f"\nFSM STATE: {machine.state}")
+        print(f"REQUEST BODY: \n{body}")
 
         # Advance the FSM for each MessageEvent
         response = machine.advance(event)
