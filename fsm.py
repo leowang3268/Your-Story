@@ -451,6 +451,7 @@ class TocMachine(GraphMachine):
         send_button_message(event.reply_token, text, btn, url)
 
     def is_going_to_user(self, event):
+        global is_restart
         text = event.message.text
         if text == 'yes':
             is_restart = True
