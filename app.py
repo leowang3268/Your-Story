@@ -249,9 +249,9 @@ def webhook_handler():
         print(f"\nFSM STATE: {machine.state}")
         print(f"REQUEST BODY: \n{body}")
 
-        if machine.state == 'user':
-            send_text_message(
-                event.reply_token, "WELCOME. Type \"start game\" to start the game.")
+        # if machine.state == 'user':
+        #     send_text_message(
+        #         event.reply_token, "WELCOME. Type \"start game\" to start the game.")
         # Advance the FSM for each MessageEvent
         response = machine.advance(event)
         # send_text_message(event.reply_token, "hey")
