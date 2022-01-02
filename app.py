@@ -51,7 +51,7 @@ machine = TocMachine(
             "trigger": "advance",
             "source": "backdoor",
             "dest": "jail",
-            "conditions": "is_going_to_user",
+            "conditions": "is_going_to_jail",
         },
         {
             "trigger": "advance",
