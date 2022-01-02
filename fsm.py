@@ -119,6 +119,7 @@ class TocMachine(GraphMachine):
         text = 'The door is locked! Return to jail'
 
         send_button_message(event.reply_token, text)
+        self.
 
     def on_enter_kitchen(self, event):
         text = 'You\'ve enter the kitchen. What do you want to do?'

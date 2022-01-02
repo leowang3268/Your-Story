@@ -182,7 +182,7 @@ machine = TocMachine(
         },
 
         {
-            "trigger": "back",
+            "trigger": "go_back",
             "source": "backdoor",
             "dest": "jail",
         },
@@ -193,34 +193,34 @@ machine = TocMachine(
 )
 
 
+# @app.route("/callback", methods=["POST"])
+# def callback():
+#     signature = request.headers["X-Line-Signature"]
+#     # get request body as text
+#     body = request.get_data(as_text=True)
+#     app.logger.info("Request body: " + body)
+
+#     # parse webhook body
+#     try:
+#         events = parser.parse(body, signature)
+#     except InvalidSignatureError:
+#         abort(400)
+
+#     # if event is MessageEvent and message is TextMessage, then echo text
+#     for event in events:
+#         if not isinstance(event, MessageEvent):
+#             continue
+#         if not isinstance(event.message, TextMessage):
+#             continue
+
+#         # line_bot_api.reply_message(
+#         #     event.reply_token, TextSendMessage(text=event.message.text)
+#         # )
+
+#     return "OK"
+
+
 @app.route("/callback", methods=["POST"])
-def callback():
-    signature = request.headers["X-Line-Signature"]
-    # get request body as text
-    body = request.get_data(as_text=True)
-    app.logger.info("Request body: " + body)
-
-    # parse webhook body
-    try:
-        events = parser.parse(body, signature)
-    except InvalidSignatureError:
-        abort(400)
-
-    # if event is MessageEvent and message is TextMessage, then echo text
-    for event in events:
-        if not isinstance(event, MessageEvent):
-            continue
-        if not isinstance(event.message, TextMessage):
-            continue
-
-        # line_bot_api.reply_message(
-        #     event.reply_token, TextSendMessage(text=event.message.text)
-        # )
-
-    return "OK"
-
-
-@app.route("/webhook", methods=["POST"])
 def webhook_handler():
     signature = request.headers["X-Line-Signature"]
     # get request body as text
@@ -244,13 +244,15 @@ def webhook_handler():
         print(f"\nFSM STATE: {machine.state}")
         print(f"REQUEST BODY: \n{body}")
 
+        if machine.state == 'user':
+            send_text_message(event.reply_token, "at the state of user.")
         # Advance the FSM for each MessageEvent
-        response = machine.advance(event)
-        send_text_message(event.reply_token, "hey")
-        if response == False:
-            send_text_message(event.reply_token, "Not Entering any State")
-    print("test")
-    send_text_message(event.reply_token, "hi")
+        # response = machine.advance(event)
+        # send_text_message(event.reply_token, "hey")
+        # if response == False:
+        #     send_text_message(event.reply_token, "Not Entering any State")
+    # print("test")
+    # send_text_message(event.reply_token, "hi")
     return "OK"
 
 
