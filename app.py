@@ -246,9 +246,11 @@ def webhook_handler():
 
         # Advance the FSM for each MessageEvent
         response = machine.advance(event)
+        send_text_message(event.reply_token, "hey")
         if response == False:
             send_text_message(event.reply_token, "Not Entering any State")
     print("test")
+    send_text_message(event.reply_token, "hi")
     return "OK"
 
 
