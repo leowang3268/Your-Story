@@ -73,7 +73,8 @@ class TocMachine(GraphMachine):
 
     def is_going_to_jail(self, event):
         text = event.message.text
-        return text.lower() == "start game"
+        print("enter jail")
+        return text.lower() == "start game" or text == 'leave'
 
     def on_enter_jail(self, event):
         text = 'which way do you want to go?'
