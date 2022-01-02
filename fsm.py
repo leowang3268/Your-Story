@@ -73,7 +73,7 @@ class TocMachine(GraphMachine):
 
     def is_going_to_jail(self, event):
         text = event.message.text
-        return (text.lower() == "start game" or text == 'leave')
+        return text.lower() == "start game"
 
     def on_enter_jail(self, event):
         text = 'which way do you want to go?'
@@ -118,7 +118,7 @@ class TocMachine(GraphMachine):
     def on_enter_backdoor(self, event):
         text = 'The door is locked! Return to jail'
 
-        send_button_message(event.reply_token, text)
+        send_text_message(event.reply_token, text)
         self.go_back()
 
     def on_enter_kitchen(self, event):
@@ -148,7 +148,7 @@ class TocMachine(GraphMachine):
         text = 'You\'ve found a lobster! 50 points get!'
         score += 50
         url = 'https://st2.depositphotos.com/1713003/47492/v/950/depositphotos_474928178-stock-illustration-red-lobster-vector-illustration.jpg'
-        send_button_message(event.reply_token, text, url)
+        send_text_message(event.reply_token, text)
 
     # def is_leaving_kitchen(self, event):
     #     global leave_kitchen
@@ -201,7 +201,7 @@ class TocMachine(GraphMachine):
         global have_key
         if not have_key:
             text = 'The room is locked.'
-            send_button_message(event.reply_token, text)
+            send_text_message(event.reply_token, text)
         else:
             global score
             text = 'You\'ve entered the sword room and finded a sword there. 100 points get!\nHowever, the monster is waken up by the noise and it\'s now at the outside of the sword room.\nYou need to find another way out, and QUICK!'
@@ -263,7 +263,7 @@ class TocMachine(GraphMachine):
         text = 'You\'ve found a key! Who knows what is the key for?'
         have_key = True
         url = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQk3zCxojxTkYRzk46Row09wFEv9qK0UkbYKw&usqp=CAU'
-        send_button_message(event.reply_token, text, url)
+        send_text_message(event.reply_token, text)
 
     # def is_leaving_bedroom(self, event):
     #     global leave_bedroom
@@ -314,15 +314,15 @@ class TocMachine(GraphMachine):
 
     def on_enter_wrong_answer(self, event):
         text = 'Oh No! You made the wrong answer and triggered the trap'
-        url = 'https://st2.depositphotos.com/4464609/6699/v/950/depositphotos_66998681-stock-illustration-guillotine.jpg'
-        send_button_message(event.reply_token, text, url)
+        # url = 'https://st2.depositphotos.com/4464609/6699/v/950/depositphotos_66998681-stock-illustration-guillotine.jpg'
+        send_text_message(event.reply_token, text)
 
     def on_enter_correct_answer(self, event):
         global score
         score += 250
         text = 'Nice Job! You make the right answer and open the box.\nThere\'s a diamond in the box. 250 points get!'
-        url = 'https://st2.depositphotos.com/1192512/7466/v/380/depositphotos_74660431-stock-illustration-golden-chain-necklace-with-heart.jpg?forcejpeg=true'
-        send_button_message(event.reply_token, text, url)
+        # url = 'https://st2.depositphotos.com/1192512/7466/v/380/depositphotos_74660431-stock-illustration-golden-chain-necklace-with-heart.jpg?forcejpeg=true'
+        send_text_message(event.reply_token, text)
 
     def is_going_to_outside(self, event):
         global to_outside
@@ -379,12 +379,12 @@ class TocMachine(GraphMachine):
         if not have_armor:
             text = 'OUCH! There are traps in the lawn.'
             is_dead = True
-            send_button_message(event.reply_token, text)
+            send_text_message(event.reply_token, text)
         else:
             text = 'You crouched in the lawn with your armor protecting you from the traps in the lawn, and finally escaped the house.'
             is_win = True
-            url = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQkjRCKcJSWeqkJCqeO2vpIClwOGUtjQTg_mw&usqp=CAU'
-            send_button_message(event.reply_token, text, url)
+            # url = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQkjRCKcJSWeqkJCqeO2vpIClwOGUtjQTg_mw&usqp=CAU'
+            send_text_message(event.reply_token, text)
 
     def on_enter_gate(self, event):
         global have_sword
@@ -393,12 +393,12 @@ class TocMachine(GraphMachine):
         if not have_sword:
             text = 'There\'s a guard in front of the gate. You have no weapon to fight him.'
             is_dead = True
-            send_button_message(event.reply_token, text)
+            send_text_message(event.reply_token, text)
         else:
             text = 'You use your sword to defeat the guard blocking the gate, and finally escaped the house.'
             is_win = True
-            url = 'https://en.pimg.jp/079/061/259/1/79061259.jpg'
-            send_button_message(event.reply_token, text, url)
+            # url = 'https://en.pimg.jp/079/061/259/1/79061259.jpg'
+            send_text_message(event.reply_token, text)
 
     def on_enter_warehouse(self, event):
         global is_win
@@ -406,7 +406,7 @@ class TocMachine(GraphMachine):
         text = 'You entered the warehouse and find a car there. You use the key stolen from the bedroom, and finally escaped the house.'
         is_win = True
         url = 'data:image/png;base64,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'
-        send_button_message(event.reply_token, text, url)
+        send_text_message(event.reply_token, text)
 
     def is_going_to_dead(self):
         return is_dead
