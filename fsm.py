@@ -73,7 +73,7 @@ class TocMachine(GraphMachine):
 
     def is_going_to_jail(self, event):
         text = event.message.text
-        return text.lower() == "start game" or text == 'leave'
+        return text.lower() == "start game" or text == 'leave' or text == 'The door is locked! Return to jail'
 
     def on_enter_jail(self, event):
         text = 'which way do you want to go?'
@@ -447,6 +447,6 @@ class TocMachine(GraphMachine):
 
     def is_going_to_user(self, event):
         text = event.message.text
-        if text == 'yes' or text == 'The door is locked! Return to jail':
+        if text == 'yes':
             is_restart = True
         return is_restart
