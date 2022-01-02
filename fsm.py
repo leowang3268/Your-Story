@@ -79,16 +79,16 @@ class TocMachine(GraphMachine):
         text = 'which way do you want to go?'
         btn = [
             MessageTemplateAction(
-                label='backdoor',
-                text='backdoor(right)'
+                label='backdoor(right)',
+                text='backdoor'
             ),
             MessageTemplateAction(
-                label='kitchen',
-                text='kitchen(forward)'
+                label='kitchen(forward)',
+                text='kitchen'
             ),
             MessageTemplateAction(
-                label='hall',
-                text='hall(left)'
+                label='hall(left)',
+                text='hall'
             ),
         ]
         url = 'https://static.vecteezy.com/system/resources/thumbnails/001/312/495/small/jail-and-prison-cell-background-free-vector.jpg'
@@ -97,21 +97,21 @@ class TocMachine(GraphMachine):
     def is_going_to_backdoor(self, event):
         global to_backdoor
         text = event.message.text
-        if text == 'backdoor(right)':
+        if text == 'backdoor':
             to_backdoor = True
         return to_backdoor
 
     def is_going_to_kitchen(self, event):
         global to_kitchen
         text = event.message.text
-        if text == 'kitchen(forward)':
+        if text == 'kitchen':
             to_kitchen = True
         return to_kitchen
 
     def is_going_to_hall(self, event):
         global to_hall
         text = event.message.text
-        if (text == 'hall(left)' or text == 'leave'):
+        if (text == 'hall' or text == 'leave'):
             to_hall = True
         return to_hall
 
@@ -119,7 +119,6 @@ class TocMachine(GraphMachine):
         text = 'The door is locked! Return to jail'
 
         send_text_message(event.reply_token, text)
-        self.go_back()
 
     def on_enter_kitchen(self, event):
         text = 'You\'ve enter the kitchen. What do you want to do?'
@@ -448,6 +447,6 @@ class TocMachine(GraphMachine):
 
     def is_going_to_user(self, event):
         text = event.message.text
-        if text == 'yes':
+        if text == 'yes' or text == 'The door is locked! Return to jail':
             is_restart = True
         return is_restart

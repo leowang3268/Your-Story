@@ -47,7 +47,12 @@ machine = TocMachine(
             "dest": "backdoor",
             "conditions": "is_going_to_backdoor",
         },
-
+        {
+            "trigger": "advance",
+            "source": "backdoor",
+            "dest": "jail",
+            "conditions": "is_going_to_user",
+        },
         {
             "trigger": "advance",
             "source": "jail",
@@ -244,8 +249,9 @@ def webhook_handler():
         print(f"\nFSM STATE: {machine.state}")
         print(f"REQUEST BODY: \n{body}")
 
-        # if machine.state == 'user':
-        #     send_text_message(event.reply_token, "at the state of user.")
+        if machine.state == 'user':
+            send_text_message(
+                event.reply_token, "WELCOME. Type \"start game\" to start the game.")
         # Advance the FSM for each MessageEvent
         response = machine.advance(event)
         # send_text_message(event.reply_token, "hey")
