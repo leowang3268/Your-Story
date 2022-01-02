@@ -91,7 +91,7 @@ class TocMachine(GraphMachine):
                 text='hall(left)'
             ),
         ]
-        url = 'https://cdn.pixabay.com/photo/2016/03/29/10/49/jail-1287943__480.png'
+        url = 'https://static.vecteezy.com/system/resources/thumbnails/001/312/495/small/jail-and-prison-cell-background-free-vector.jpg'
         send_button_message(event.reply_token, text, btn, url)
 
     def is_going_to_backdoor(self, event):
