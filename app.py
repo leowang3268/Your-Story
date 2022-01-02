@@ -244,13 +244,13 @@ def webhook_handler():
         print(f"\nFSM STATE: {machine.state}")
         print(f"REQUEST BODY: \n{body}")
 
-        if machine.state == 'user':
-            send_text_message(event.reply_token, "at the state of user.")
+        # if machine.state == 'user':
+        #     send_text_message(event.reply_token, "at the state of user.")
         # Advance the FSM for each MessageEvent
-        # response = machine.advance(event)
+        response = machine.advance(event)
         # send_text_message(event.reply_token, "hey")
-        # if response == False:
-        #     send_text_message(event.reply_token, "Not Entering any State")
+        if response == False:
+            send_text_message(event.reply_token, "Not Entering any State")
     # print("test")
     # send_text_message(event.reply_token, "hi")
     return "OK"
