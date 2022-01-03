@@ -60,7 +60,7 @@ class TocMachine(GraphMachine):
         global to_jail, leave_kitchen, leave_backdoor
         to_jail = False
         text = event.message.text
-        if text.lower() == "start game" or text.lower() == 'leave':
+        if text.lower() == "start game" or text.lower() == 'leave' or leave_kitchen or leave_backdoor:
             to_jail = True
         return to_jail
 
@@ -107,7 +107,7 @@ class TocMachine(GraphMachine):
         global to_hall, leave_bedroom, leave_sword_room
         to_hall = False
         text = event.message.text
-        if (text.lower() == 'hall' or text.lower() == 'leave' or text == 'sword' or leave_sword_room):
+        if (text.lower() == 'hall' or text.lower() == 'leave' or leave_sword_room or leave_bedroom):
             to_hall = True
         return to_hall
 
