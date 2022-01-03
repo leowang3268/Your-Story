@@ -169,19 +169,19 @@ machine = TocMachine(
         },
         {
             "trigger": "advance",
-            "source": "outdoors",
+            "source": "outside",
             "dest": "lawn",
             "conditions": "is_going_to_lawn",
         },
         {
             "trigger": "advance",
-            "source": "outdoors",
+            "source": "outside",
             "dest": "gate",
             "conditions": "is_going_to_gate",
         },
         {
             "trigger": "advance",
-            "source": "outdoors",
+            "source": "outside",
             "dest": "warehouse",
             "conditions": "is_going_to_warehouse",
         },
