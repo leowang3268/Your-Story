@@ -86,6 +86,12 @@ machine = TocMachine(
         {
             "trigger": "advance",
             "source": "sword_room",
+            "dest": "hall",
+            "conditions": "is_going_to_hall",
+        },
+        {
+            "trigger": "advance",
+            "source": "sword_room",
             "dest": "outside",
             "conditions": "is_going_to_outside",
         },

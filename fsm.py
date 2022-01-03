@@ -1,3 +1,4 @@
+from logging import fatal
 from os import truncate
 from transitions.extensions import GraphMachine
 
@@ -7,11 +8,13 @@ from linebot.models import MessageTemplateAction
 # global variable
 to_jail = False
 to_backdoor = False
+leave_backdoor = False
 to_kitchen = False
 to_hall = False
 explore_kitchen = False
 leave_kitchen = False
 to_sword_room = False
+leave_sword_room = False
 to_armor_room = False
 to_bedroom = False
 have_key = False
@@ -41,17 +44,19 @@ class TocMachine(GraphMachine):
     # user start
     def on_enter_user(self):
         # initialize global variables
-        global to_jail, to_backdoor, to_kitchen, to_hall, explore_kitchen, leave_kitchen, to_sword_room
-        global to_armor_room, to_bedroom, have_key, explore_bedroom, leave_bedroom, to_outside
+        global to_jail, leave_backdoor, to_backdoor, to_kitchen, to_hall, explore_kitchen, leave_kitchen, to_sword_room
+        global leave_sword_room, to_armor_room, to_bedroom, have_key, explore_bedroom, leave_bedroom, to_outside
         global to_secret_room, wrong_answer, correct_answer, have_sword, have_armor, to_lawn
         global to_gate, to_warehouse, is_dead, is_win, is_restart, score
         to_jail = False
         to_backdoor = False
+        leave_backdoor = False
         to_kitchen = False
         to_hall = False
         explore_kitchen = False
         leave_kitchen = False
         to_sword_room = False
+        leave_sword_room = False
         to_armor_room = False
         to_bedroom = False
         have_key = False
@@ -76,11 +81,14 @@ class TocMachine(GraphMachine):
     def is_going_to_jail(self, event):
         global to_jail
         text = event.message.text
-        if text.lower() == "start game" or text == 'leave' or text == 'The door is locked! Return to jail':
+        if text.lower() == "start game" or leave_kitchen or leave_backdoor:
             to_jail = True
         return to_jail
 
     def on_enter_jail(self, event):
+        global leave_kitchen, leave_backdoor
+        leave_kitchen = False
+        leave_backdoor = False
         text = 'which way do you want to go?'
         btn = [
             MessageTemplateAction(
@@ -102,27 +110,28 @@ class TocMachine(GraphMachine):
     def is_going_to_backdoor(self, event):
         global to_backdoor
         text = event.message.text
-        if text == 'backdoor':
+        if text.lower() == 'backdoor':
             to_backdoor = True
         return to_backdoor
 
     def is_going_to_kitchen(self, event):
         global to_kitchen
         text = event.message.text
-        if text == 'kitchen':
+        if text.lower() == 'kitchen':
             to_kitchen = True
         return to_kitchen
 
     def is_going_to_hall(self, event):
         global to_hall
         text = event.message.text
-        if (text == 'hall' or text == 'leave'):
+        if (text.lower() == 'hall' or leave_bedroom or leave_sword_room):
             to_hall = True
         return to_hall
 
     def on_enter_backdoor(self, event):
+        global leave_backdoor
         text = 'The door is locked! Return to jail'
-
+        leave_backdoor = True
         send_text_message(event.reply_token, text)
 
     def on_enter_kitchen(self, event):
@@ -143,7 +152,7 @@ class TocMachine(GraphMachine):
     def is_going_to_kitchen(self, event):
         global explore_kitchen
         text = event.message.text
-        if text == 'explore':
+        if text.lower() == 'explore':
             explore_kitchen = True
         return explore_kitchen
 
@@ -151,7 +160,7 @@ class TocMachine(GraphMachine):
         global score
         text = 'You\'ve found a lobster! 50 points get!'
         score += 50
-        url = 'https://st2.depositphotos.com/1713003/47492/v/950/depositphotos_474928178-stock-illustration-red-lobster-vector-illustration.jpg'
+        # url = 'https://st2.depositphotos.com/1713003/47492/v/950/depositphotos_474928178-stock-illustration-red-lobster-vector-illustration.jpg'
         send_text_message(event.reply_token, text)
 
     # def is_leaving_kitchen(self, event):
@@ -162,19 +171,22 @@ class TocMachine(GraphMachine):
     #     return leave_kitchen
 
     def on_enter_hall(self, event):
+        global leave_bedroom, leave_sword_room
+        leave_bedroom = False
+        leave_sword_room = False
         text = 'You\'ve entered the hall. Which way do you want to go?'
         btn = [
             MessageTemplateAction(
-                label='sword room',
-                text='sword room(left)'
+                label='sword room(left)',
+                text='sword room'
             ),
             MessageTemplateAction(
-                label='armor room',
-                text='armor room(forward)'
+                label='armor room(forward)',
+                text='armor room'
             ),
             MessageTemplateAction(
-                label='bedroom',
-                text='bedroom(right)'
+                label='bedroom(right)',
+                text='bedroom'
             ),
         ]
         url = 'https://media.istockphoto.com/vectors/vector-old-hall-room-with-stairs-doors-and-a-window-cartoon-vector-id1256874566?k=20&m=1256874566&s=170667a&w=0&h=NMclArE3rh9teJRgWPS-ng8LlShu1rlzNJknnRvGLI8='
@@ -183,41 +195,42 @@ class TocMachine(GraphMachine):
     def is_going_to_sword_room(self, event):
         global to_sword_room
         text = event.message.text
-        if text == 'sword room(left)':
+        if text.lower() == 'sword room':
             to_sword_room = True
         return to_sword_room
 
     def is_going_to_armor_room(self, event):
         global to_armor_room
         text = event.message.text
-        if text == 'armor room(forward)':
+        if text.lower() == 'armor room':
             to_armor_room = True
         return to_armor_room
 
     def is_going_to_bedroom(self, event):
         global to_bedroom
         text = event.message.text
-        if text == 'bedroom(right)':
+        if text.lower() == 'bedroom':
             to_bedroom = True
         return to_bedroom
 
     def on_enter_sword_room(self, event):
-        global have_key
+        global have_key, leave_sword_room
         if not have_key:
             text = 'The room is locked.'
+            leave_sword_room = True
             send_text_message(event.reply_token, text)
         else:
             global score
-            text = 'You\'ve entered the sword room and finded a sword there. 100 points get!\nHowever, the monster is waken up by the noise and it\'s now at the outside of the sword room.\nYou need to find another way out, and QUICK!'
+            text = 'You\'ve entered the sword room and found a sword there. 100 points get!\nHowever, the monster is waken up by the noise and it\'s now at the outside of the sword room.\nYou need to find another way out, and QUICK!'
             score += 100
             btn = [
                 MessageTemplateAction(
-                    label='outside',
-                    text='There\'s a window, jump outside!'
+                    label='There\'s a window, jump outside!',
+                    text='outside!'
                 ),
                 MessageTemplateAction(
-                    label='secret room',
-                    text='At the corner of the wall, some stones are cracking. Ah-ha! There\'s a secret passage'
+                    label='At the corner of the wall, some stones are cracking. Ah-ha! There\'s a secret passage',
+                    text='secret room'
                 ),
             ]
             url = 'https://previews.123rf.com/images/klyaksun/klyaksun1907/klyaksun190700278/128801904-museum-exhibition-room-cartoon-vector-illustration-palace-interior-art-gallery-of-medieval-castle-em.jpg'
@@ -225,16 +238,16 @@ class TocMachine(GraphMachine):
 
     def on_enter_armor_room(self, event):
         global score
-        text = 'You\'ve entered the armor room and finded an armor there. 50 points get!\nHowever, the monster is waken up by the noise and it\'s now at the outside of the armor room.\nYou need to find another way out, and QUICK!'
+        text = 'You\'ve entered the armor room and found an armor there. 50 points get!\nHowever, the monster is waken up by the noise and it\'s now at the outside of the armor room.\nYou need to find another way out, and QUICK!'
         score += 50
         btn = [
             MessageTemplateAction(
-                label='outside',
-                text='There\'s a window, jump outside!'
+                label='There\'s a window, jump outside!',
+                text='outside'
             ),
             MessageTemplateAction(
-                label='secret room',
-                text='At the corner of the wall, some stones are cracking. Ah-ha! There\'s a secret passage'
+                label='At the corner of the wall, some stones are cracking. Ah-ha! There\'s a secret passage',
+                text='secret room'
             ),
         ]
         url = 'https://image.freepik.com/free-vector/medieval-castle-throne-room-ballroom-interior-with-knights-armor-both-sides-king_33099-892.jpg'
@@ -266,7 +279,7 @@ class TocMachine(GraphMachine):
         global have_key
         text = 'You\'ve found a key! Who knows what is the key for?'
         have_key = True
-        url = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQk3zCxojxTkYRzk46Row09wFEv9qK0UkbYKw&usqp=CAU'
+        # url = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQk3zCxojxTkYRzk46Row09wFEv9qK0UkbYKw&usqp=CAU'
         send_text_message(event.reply_token, text)
 
     # def is_leaving_bedroom(self, event):
@@ -279,7 +292,7 @@ class TocMachine(GraphMachine):
     def is_going_to_secret_room(self, event):
         global to_secret_room
         text = event.message.text
-        if text == 'At the corner of the wall, some stones are cracking. Ah-ha! There\'s a secret passage':
+        if text == 'secret room':
             to_secret_room = True
         return to_secret_room
 
@@ -332,7 +345,7 @@ class TocMachine(GraphMachine):
         global to_outside
         global correct_answer
         text = event.message.text
-        if text == 'There\'s a window, jump outside!' or correct_answer:
+        if text == 'outside!' or correct_answer:
             to_outside = True
         return to_outside
 
@@ -340,16 +353,16 @@ class TocMachine(GraphMachine):
         text = 'You\'ve reached outside. Which way do you want to go?'
         btn = [
             MessageTemplateAction(
-                label='lawn',
-                text='lawn(left)'
+                label='lawn(left)',
+                text='lawn'
             ),
             MessageTemplateAction(
-                label='gate',
-                text='gate(forward)'
+                label='gate(forward)',
+                text='gate'
             ),
             MessageTemplateAction(
-                label='warehouse',
-                text='warehouse(right)'
+                label='warehouse(right)',
+                text='warehouse'
             ),
         ]
         url = 'data:image/jpeg;base64,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'
@@ -358,21 +371,21 @@ class TocMachine(GraphMachine):
     def is_going_to_lawn(self, event):
         global to_lawn
         text = event.message.text
-        if text == "lawn(left)":
+        if text == "lawn":
             to_lawn = True
         return to_lawn
 
     def is_going_to_gate(self, event):
         global to_gate
         text = event.message.text
-        if text == "gate(forward)":
+        if text == "gate":
             to_gate = True
         return to_gate
 
     def is_going_to_warehouse(self, event):
         global to_warehouse
         text = event.message.text
-        if text == "warehouse(right)":
+        if text == "warehouse":
             to_warehouse = True
         return to_warehouse
 
@@ -409,7 +422,7 @@ class TocMachine(GraphMachine):
 
         text = 'You entered the warehouse and find a car there. You use the key stolen from the bedroom, and finally escaped the house.'
         is_win = True
-        url = 'data:image/png;base64,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'
+        # url = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAANgAAADpCAMAAABx2AnXAAABtlBMVEX///8REiSeLzX7xIHj2tGblpLMxb16d3LMjWQAAADa2tuIKS35tlvChoibJCyURUeOKzAlKTJxb2o5SlL90XDIe0zSy8GOiYXUlWnr5N7qr3fyunzr1MfhpnLLil/BurTasJSjnZnb19Glrq07OjvYx74aHSTu0bMNGi6ua0J7g4ZPSkCvlFk9QU2rYjSRcESSemznxZ4AFi6ZoaMAABQUIDDgu2erinjn5+g3Oz/Jycq8oFuXZDrizaPJqIwACxkAABwnP0zEso/Tq3xeXVvNiFGZaEqTdVVHR0WYkX2pgUkAAB//3nfVxKFMUmIdIy+kdUf99OfunV0wLCdrQCZgYGmFHCGscnSACBHVuruXoKDAfV27ckcbHiVbSDwrMz1OPDuMVzWITSWNjZVtbnbCmJmqUlXVra6XDRmhYWK6dneXUFCuiYOeKzC/qqKCAAC3mpVKVlt6cWCGY0+wel1xVUdlWE85LB62bVG2oYS9lXO3kHDgi1Ofh3Gqc1SeYD2fcmHfvKvAoXulh191Xj9bQDDepVTMmE//z3hQQjBaTDbcumeIaDydgl0AACq3rJf/4aVlNxi+x67EAAAMiElEQVR4nO2cjUPT1hbA6YrSoJsGH1AbKbpmPE1fJtJUPiYk2lLq89G4aZjSkgDJPnzubUNapqDCRPSx597Hf/zOvUnaNG1xH20p7vxcmvQka/Pj3HvuvS3a1YUgCIIgCIIgCIIgCIIgCIIgCIIgCIIgCIIgCIIgCIIgCIIgCIIgCNI6vni/vXzRHq2JL7/+oK0s3Dt1tg1eZ9/74L12cvoEsPBVy7263/tHW71O2Nz7vMVe979uq9fpEy4Lp7tb6fXV1+3Ucr0W7KS1sIZ80VYvN10L3zhmDyZa5PX3w/BaeDg8MPyQqi0sfNQSry/bWQ4r6ToODHxzomXNceIwvBZOfTtwnOImrelDWluHr+p02Qx84zTH+031amuZr0mXbeYkralD2v12NkM3XZ8f9+Mk7VTThrR2lvny2FWVLidp355aaGYNuf/d6bbhputBjZW3pzVpSLt/70R7WTjxfW26qpK2cKIZNaTdYgsPhhto2T2N3s53TTBrr9gB6fIm7V4zxE49fHiqbTwYPtiL8P69pogRzna3i7drHT/+4YdNaYodKNbV9fm7KtYsUAzFUAzFUOwPJDZQj19wI7+QQxMbGDxWh8G+JtFTERtuTEvE6nkdG+xpEoMesQuNOOpidd+JgGIohmIodphiE+7nd2fpW74zYhMMM1EWO84w9Qfooy42UCPWk+Wz2Sz/Ftwr6l1ZifV1jtggK8sjI2RrgJztITMl3t71pPnaWZRzri99p4PEWHlp0sGADUxYY7ICPM+SBpbmebuluXsvWZIpeq5zxHrkpUUhIcRiscVFQTAFeWntjLBYRpBtsT6WN6hgNu1I2DhC6Ukqn812jNiFrLwWA5H5+en5mZn56UfyRt/1m+R4ZmZxfnr6hjwizwW5UCgVD8aLofAO3YVCo6kgx4XyEfsxzj1aD4WLkz0dJMbLQkxIxKanicz0dFwaLYsdI2KSI8bFgyk+FOaHgvFQKBwFsWAwHIrQRy7OcXw+rG90kNjgkrzoFVuSxhuKBUvrc6VIfbHgur6rb3WSmDwS84jdkKSZ+mKRODzy2VA9MWiKwZDOFztJrE82vGLPlDsz1X3MEcsTseiyDr0qng+F86MpDpTyVCxPxUp8voPELqTltFfskbTRIGOkKWZ0PdOoKRb50nqtWItW0GdtPu3+4YfuTynnzvkyNgm1wyOWlUYPaIp8McRXi3HlphjPhPnRGrHWfOZxrj/6+HE0GiXvXubP1XPFEWnRK6ZIT+o1xSAVmyuFw6WfqVjI18eCL/RQOJP1i7XoU6pz0VA+D2POAWKDsgxDs7B47Mb89JUnMzck+QYVu0LELkCQjmNcJBodikO1j4ajRiROduOpCPSr/BAH4xic4+g5va9tYpQDxPrkSSJ2LLW5uQnbnHxnM/Xo+iPylAY2t0BspVDof3ppmX9egAPoZ5dg/7Sfbv1PybkCv7wOscL2pCP24aGLpWWNiPVsbm2Nj49vlWR960n6+qPNrWc3n82R4DOYUt0tXHr+fHtSL6xkMisry3xmfR1cSZAohoeGhnZ3hyi76zvjO+Pnz1/xQHI/PjNzxReD0Mz5Hynnmi92gSW1IyYIzsyPl9M9PWtn0vbabBB2fTAJvrO3r+vLvE52++Rgf39/b488wm454nnxCLzb43w07H3DcDSah57uvYyDjk8uGyKn8tHzLciYTGoHiCUSiUXTFJZkmDaundGECmQSTFckfNZeoviWLWm/GFAtZseqxJzLhuiuFWIw77DFFsnknkzlQcw6U8a4rr1t2dLnffWOEbNrB1RFgYqtySw8ahWxM9cNKtZHli2svWxZy9pLFbLohAerE8Vg3rFmi5nz8/M3nmzIG/NQ7r1isNCEcp8qFlPxSHanGNqJc/FicbM4+iISiWwWU1zK++IdI8bT2lEeoOPSM3isFSMDNFm2xKPh5VTNzKMDxY6RNUtZbHqGlZ7UF3PmivrOnM7VzDwOX4wjeMWgdiQ8GRuXpfmGYjBtCub5bL52Enz4YuS1I14xumapZGxUXppuJEaWLcE6y5bqttg+saq5ol/MrR2u2Ia00VCMNEXueTxe7JCMPX7sbYpQyKqaolM7XDFeuekXmzRGlsgkOE/F+GKRrxUjDdwnxkUqMVcMYpEWiVG8YjDRiMGcw/6Uan5ehtoxfWWcZ+vAz20Ed0uhsL5bUzw4+l+1mNM+vGIR8iNoTVP0i0HtkCWCbO9GZFiAPRlTwUNN+rkY5wy4l7zBORmjfWyIo3frFYO39IuRu/CLkcuIWL4F5b5PHpEcMQLMdl+ktnjwSvIvL/t4yat6ph9YL+kF2D2dvXTpaf+lwtMC52uKj+GOvc2TiD0mTbES4pzLhuippouR2mF/3Gv1bf0892xD1jc318Fr7PLJOrxcLmzDsmWb5zOwI8uvfJ48+qdUVMyDK+YJtU7sAhWbdGoHrMdGR0cHYc1y8xE0w4uv63mdPLlX2tN1WK7wZFcq0Welu3v+2X2+TlXM14rlQ61oihb9voF1v30wKPDUIO3wTX2vkxtpSpZPe1nrpGXLpFqv8DkkXzUS6/xlywFa7FijhJ2MpyvfqLjLlp4OWrYMMMzFGpIXnaJ+8WUjr5OpyZ3i1g6fgtXLVnH0SSqV2tp5kUp1kJi0+xc/f3Vp1A6B4K5eHqCdmUf1R5aHK3blKsNc/ZOPxjZeMTKlWo5UzTw6Q4wOpf+sI+be+uvLb9688SWNxC7TWJAr8u4kuLPWY2TwjzQWe7U/RruZt96/dmLqZSLW0cuWhmKvZXcQuBgve91yY2MvTwaDRT7bScuWcg+ny5ZGYq+WiIMhijBQJ53S+Eph7RixvRwMLtf0sYjdECI+Mc4Tc8WGuGYtW6z0so2+oes/7e/v/2QjS59crfAvJ2FvLsLdizlALM+qXiYhlnNiYxz5RmV5s3Y95pvd11m2kCmV5zIiFv3tUypRVSEJKgUm75Lq4MYoybFPbLEk9RJFcDPYJJ0Gv5IrMUjjz3yR/GYA7WMhTx/zZYzMbqFteDNGJ8GR6oyVJ8G//iPuSWc5QqQYgDwNjPn5ty326hZJjkiA9Ki63cO8MTaZmQXW1/XC7Gz/7Ozt25/1fwbAASVKnhSuUW7Pkid2/No171W3P6PPqhkKh1O/QmyqDv/5pIarNWI5Vo27YkZFjC9sE3h+JZPZhiUZLFnoTV5zZDxi16iYc3yt5qrZWsK/Mmt+/kuLxd+qsAuFQruTm7GXtVlkl1dgsXL37h67V9L3VlZW9vRS/2+jcKmG/O8Uo19ED9/hef6ODRx1d5Nvu8mKRSRmpD+pffQbcFb19LERiyziTPezVnrQPLHnv1PMhlaPEfJpgKoGBDsWY9yqCPVetX/JwJQ9MbbOC3Wa2JS9cKGf2iy5v3yaHaGDFlGQEu5PYKkSG67zQt5b+9jBd8f1wtsr0E0dVmwyTRHriknOjGLE6HVjE1nZjqmSWY6xbkxO1Hudyq1uzzh/H+gs3OV2Jbzt/B2es9+vrqxUxFbL/4DC/+4CTRPr6tVk8qGbKnj/sr9p0AFibcobY+kooU35X4HipuPj1dXMuMPq6qonvOqGM544HO54Lic0SwySAcW/1/9vGPRC8JfEXM45fOSjQbzR5YSmiSEIgiAIgiAIgiAIgiAIgiAIgiAIgiAIgiAIgiAIgiAIgiAIgiAIchC97yhdzDtKV+AdBcWOGgeKKUrVM2c7GjhiImxs0j423HOSpkmsWL5UVAKqZgSOCLaYYmmKZEqSFJAkxgwokqQoEhOLJRJWgpEYJqAwjDHFMKIpvuX1OgYnY6opqYJlmoxgWoJpmKYlJnK9awxjTWhm7xQr9vaKU2IvKx5exur3AtpbFLvPKGTvXuaISWbAsizJsjSGMW+ZAQaOJHGqF2TVKUaLTYkMO9GrtLeLKZZqSUmJVQ1FVQKCYKiBpKLmSKNRIaIGVLhhUzRzpqCZoiWQY0bIKV4xRdNM+GMJIjTJWwlJsswcND+lVzBzMUYcnpIkdmJKbbNYDlpPAn7gAmwmbBrcjWUlRAZcyClT1BQzYBoJuHNy87CpVrVYQEkIqqmwqgkFQrO0gKnllIRlQvMzeq0py4wJpClKbRULSFOsqQlaDqzMnAZqJtEztUBChM6fA9FkQqT2AXLeSKgmnPCJWarCmhbZJI2BBmgYypopSJIm3jI1kkHWYqx2lw4VarEkBgxFDCRVUTJUQxLZgKGqIqnjalJURI3EA+QExAO58v9aHseIp6TQDf7Q1EBxpHEShojSkaOY0uDZH3PmcZRBsaPG/wEwHTIEiOx9nwAAAABJRU5ErkJggg=='
         send_text_message(event.reply_token, text)
 
     def is_going_to_dead(self):
