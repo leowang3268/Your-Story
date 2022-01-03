@@ -126,7 +126,7 @@ class TocMachine(GraphMachine):
         url = 'https://graphicriver.img.customer.envatousercontent.com/files/268608494/preview_11687188.jpg?auto=compress%2Cformat&q=80&fit=crop&crop=top&max-h=8000&max-w=590&s=3cc7cd99bcedd0a04565830526921ed1'
         send_button_message(event.reply_token, text, btn, url)
 
-    def is_going_to_kitchen(self, event):
+    def is_going_to_explore_kitchen(self, event):
         global explore_kitchen
         explore_kitchen = False
         text = event.message.text
@@ -231,7 +231,7 @@ class TocMachine(GraphMachine):
                 text='outside'
             ),
             MessageTemplateAction(
-                label='There\'s a secret passage'
+                label='There\'s a secret passage',
                 # label='At the corner of the wall, some stones are cracking. Ah-ha! There\'s a secret passage',
                 text='secret room'
             ),
