@@ -54,7 +54,7 @@ class TocMachine(GraphMachine):
         score = 0
 
     def is_going_to_jail(self, event):
-        global to_jail
+        global to_jail, leave_kitchen, leave_backdoor
         to_jail = False
         text = event.message.text
         if text.lower() == "start game" or leave_kitchen or leave_backdoor:
@@ -100,7 +100,7 @@ class TocMachine(GraphMachine):
         return to_kitchen
 
     def is_going_to_hall(self, event):
-        global to_hall
+        global to_hall, leave_bedroom, leave_sword_room
         to_hall = False
         text = event.message.text
         if (text.lower() == 'hall' or leave_bedroom or leave_sword_room):
