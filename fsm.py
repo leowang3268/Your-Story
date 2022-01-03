@@ -44,7 +44,7 @@ class TocMachine(GraphMachine):
         self.machine = GraphMachine(model=self, **machine_configs)
 
     # user start
-    def on_enter_user(self):
+    def on_enter_user(self, event):
         # initialize global variables
         global is_dead, is_win, is_restart, score
         is_dead = False
