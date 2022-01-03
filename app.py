@@ -72,9 +72,10 @@ machine = TocMachine(
             "conditions": "is_going_to_explore_kitchen",
         },
         {
-            "trigger": "back",
+            "trigger": "advance",
             "source": "explore_kitchen",
             "dest": "kitchen",
+            "conditions": "is_going_to_kitchen",
         },
         {
             "trigger": "advance",
@@ -89,9 +90,10 @@ machine = TocMachine(
             "conditions": "is_going_to_sword_room",
         },
         {
-            "trigger": "back",
+            "trigger": "advance",
             "source": "sword_room",
             "dest": "hall",
+            "conditions": "is_going_to_hall",
         },
         {
             "trigger": "advance",
@@ -124,9 +126,10 @@ machine = TocMachine(
             "conditions": "is_going_to_explore_bedroom",
         },
         {
-            "trigger": "go_back",
+            "trigger": "advance",
             "source": "explore_bedroom",
             "dest": "bedroom",
+            "conditions": "is_going_to_bedroom",
         },
         {
             "trigger": "advance",

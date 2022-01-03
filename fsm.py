@@ -12,6 +12,7 @@ leave_backdoor = False
 to_kitchen = False
 to_hall = False
 explore_kitchen = False
+complete_explore_kitchen = False
 leave_kitchen = False
 to_sword_room = False
 leave_sword_room = False
@@ -19,6 +20,7 @@ to_armor_room = False
 to_bedroom = False
 have_key = False
 explore_bedroom = False
+complete_explore_bedroom = False
 leave_bedroom = False
 to_outside = False
 to_secret_room = False
@@ -90,10 +92,10 @@ class TocMachine(GraphMachine):
         return to_backdoor
 
     def is_going_to_kitchen(self, event):
-        global to_kitchen
+        global to_kitchen, complete_explore_kitchen
         to_kitchen = False
         text = event.message.text
-        if text.lower() == 'kitchen':
+        if text.lower() == 'kitchen' or complete_explore_kitchen:
             to_kitchen = True
         return to_kitchen
 
@@ -135,8 +137,10 @@ class TocMachine(GraphMachine):
         return explore_kitchen
 
     def on_enter_explore_kitchen(self, event):
-        global score
+
+        global score, complete_explore_kitchen
         text = 'You\'ve found a lobster! 50 points get!'
+        complete_explore_kitchen = True
         score += 50
         # url = 'https://st2.depositphotos.com/1713003/47492/v/950/depositphotos_474928178-stock-illustration-red-lobster-vector-illustration.jpg'
         send_text_message(event.reply_token, text)
@@ -187,10 +191,10 @@ class TocMachine(GraphMachine):
         return to_armor_room
 
     def is_going_to_bedroom(self, event):
-        global to_bedroom
+        global to_bedroom, complete_explore_bedroom
         to_bedroom = False
         text = event.message.text
-        if text.lower() == 'bedroom':
+        if text.lower() == 'bedroom' or complete_explore_bedroom:
             to_bedroom = True
         return to_bedroom
 
@@ -264,9 +268,10 @@ class TocMachine(GraphMachine):
         return explore_bedroom
 
     def on_enter_explore_bedroom(self, event):
-        global have_key
+        global have_key, complete_explore_bedroom
         text = 'You\'ve found a key!'
         # text = 'You\'ve found a key! Who knows what is the key for?'
+        complete_explore_bedroom = True
         have_key = True
         # url = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQk3zCxojxTkYRzk46Row09wFEv9qK0UkbYKw&usqp=CAU'
         send_text_message(event.reply_token, text)
