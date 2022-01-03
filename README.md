@@ -1,91 +1,45 @@
-# TOC Project 2020
+# Your Story - TOC-Project 2021
 
-[![Maintainability](https://api.codeclimate.com/v1/badges/dc7fa47fcd809b99d087/maintainability)](https://codeclimate.com/github/NCKU-CCS/TOC-Project-2020/maintainability)
+A linebot based on finite state machine which is made as an escape room game.
 
-[![Known Vulnerabilities](https://snyk.io/test/github/NCKU-CCS/TOC-Project-2020/badge.svg)](https://snyk.io/test/github/NCKU-CCS/TOC-Project-2020)
-
-
-Template Code for TOC Project 2020
-
-A Line bot based on a finite state machine
-
-More details in the [Slides](https://hackmd.io/@TTW/ToC-2019-Project#) and [FAQ](https://hackmd.io/s/B1Xw7E8kN)
-
-## Setup
-
-### Prerequisite
-* Python 3.6
-* Pipenv
-* Facebook Page and App
-* HTTPS Server
-
-#### Install Dependency
-```sh
-pip3 install pipenv
-
-pipenv --three
-
-pipenv install
-
-pipenv shell
-```
-
-* pygraphviz (For visualizing Finite State Machine)
-    * [Setup pygraphviz on Ubuntu](http://www.jianshu.com/p/a3da7ecc5303)
-	* [Note: macOS Install error](https://github.com/pygraphviz/pygraphviz/issues/100)
-
-
-#### Secret Data
-You should generate a `.env` file to set Environment Variables refer to our `.env.sample`.
-`LINE_CHANNEL_SECRET` and `LINE_CHANNEL_ACCESS_TOKEN` **MUST** be set to proper values.
-Otherwise, you might not be able to run your code.
-
-#### Run Locally
-You can either setup https server or using `ngrok` as a proxy.
-
-#### a. Ngrok installation
-* [ macOS, Windows, Linux](https://ngrok.com/download)
-
-or you can use Homebrew (MAC)
-```sh
-brew cask install ngrok
-```
-
-**`ngrok` would be used in the following instruction**
-
-```sh
-ngrok http 8000
-```
-
-After that, `ngrok` would generate a https URL.
-
-#### Run the sever
-
-```sh
-python3 app.py
-```
-
-#### b. Servo
-
-Or You can use [servo](http://serveo.net/) to expose local servers to the internet.
+You woke up in a deep, dark jail. 
+"Why am I here?"You thought.
+If it's a dream, then it must be a nightmare.
+Whatever, you have to escape this place.
 
 
 ## Finite State Machine
-![fsm](./img/show-fsm.png)
+![fsm](./img/fsm.png)
 
-## Usage
+## How to Use
 The initial state is set to `user`.
 
-Every time `user` state is triggered to `advance` to another state, it will `go_back` to `user` state after the bot replies corresponding message.
+### States
+* user 
+* jail
+* backdoor
+* hall
+* kitchen
+* explore_kitchen
+* sword_room
+* armor_room
+* bedroom
+* explore_bedroom
+* secret_room
+* wrong_answer
+* correct_answer
+* outside
+* lawn
+* gate
+* warehouse
+* dead
+* win
 
-* user
-	* Input: "go to state1"
-		* Reply: "I'm entering state1"
+The user can type `start game` to start the game.
+Then the state will be changed to `jail`.
+The user can choose the direction they want to go, and may find rewards or challenges in there.
 
-	* Input: "go to state2"
-		* Reply: "I'm entering state2"
-
-## Deploy
+## Deploy in Heroku
 Setting to deploy webhooks on Heroku.
 
 ### Heroku CLI installation
@@ -149,11 +103,14 @@ sudo snap install --classic heroku
 
 	refference: https://hackmd.io/@ccw/B1Xw7E8kN?type=view#Q2-如何在-Heroku-使用-pygraphviz
 
-## Reference
-[Pipenv](https://medium.com/@chihsuan/pipenv-更簡單-更快速的-python-套件管理工具-135a47e504f4) ❤️ [@chihsuan](https://github.com/chihsuan)
-
-[TOC-Project-2019](https://github.com/winonecheng/TOC-Project-2019) ❤️ [@winonecheng](https://github.com/winonecheng)
-
-Flask Architecture ❤️ [@Sirius207](https://github.com/Sirius207)
-
-[Line line-bot-sdk-python](https://github.com/line/line-bot-sdk-python/tree/master/examples/flask-echo)
+## Images
+![alt text](./img/1.jpg)
+![alt text](./img/2.jpg)
+![alt text](./img/3.jpg)
+![alt text](./img/4.jpg)
+![alt text](./img/5.jpg)
+![alt text](./img/6.jpg)
+![alt text](./img/7.jpg)
+![alt text](./img/8.jpg)
+![alt text](./img/9.jpg)
+![alt text](./img/10.jpg)
