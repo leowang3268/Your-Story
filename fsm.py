@@ -212,7 +212,7 @@ class TocMachine(GraphMachine):
                     text='outside!'
                 ),
                 MessageTemplateAction(
-                    lavel='There\'s a secret passage'
+                    label='There\'s a secret passage',
                     # label='At the corner of the wall, some stones are cracking. Ah-ha! There\'s a secret passage',
                     text='secret room'
                 ),
