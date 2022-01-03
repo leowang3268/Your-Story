@@ -44,34 +44,7 @@ class TocMachine(GraphMachine):
     # user start
     def on_enter_user(self):
         # initialize global variables
-        global to_jail, leave_backdoor, to_backdoor, to_kitchen, to_hall, explore_kitchen, leave_kitchen, to_sword_room
-        global leave_sword_room, to_armor_room, to_bedroom, have_key, explore_bedroom, leave_bedroom, to_outside
-        global to_secret_room, wrong_answer, correct_answer, have_sword, have_armor, to_lawn
-        global to_gate, to_warehouse, is_dead, is_win, is_restart, score
-        to_jail = False
-        to_backdoor = False
-        leave_backdoor = False
-        to_kitchen = False
-        to_hall = False
-        explore_kitchen = False
-        leave_kitchen = False
-        to_sword_room = False
-        leave_sword_room = False
-        to_armor_room = False
-        to_bedroom = False
-        have_key = False
-        explore_bedroom = False
-        leave_bedroom = False
-        to_outside = False
-        to_secret_room = False
-        wrong_answer = False
-        correct_answer = False
-        have_sword = False
-        have_armor = False
-        to_lawn = False
-        to_gate = False
-        to_warehouse = False
-
+        global is_dead, is_win, is_restart, score
         is_dead = False
         is_win = False
         is_restart = False
@@ -80,6 +53,7 @@ class TocMachine(GraphMachine):
 
     def is_going_to_jail(self, event):
         global to_jail
+        to_jail = False
         text = event.message.text
         if text.lower() == "start game" or leave_kitchen or leave_backdoor:
             to_jail = True
@@ -109,6 +83,7 @@ class TocMachine(GraphMachine):
 
     def is_going_to_backdoor(self, event):
         global to_backdoor
+        to_backdoor = False
         text = event.message.text
         if text.lower() == 'backdoor':
             to_backdoor = True
@@ -116,6 +91,7 @@ class TocMachine(GraphMachine):
 
     def is_going_to_kitchen(self, event):
         global to_kitchen
+        to_kitchen = False
         text = event.message.text
         if text.lower() == 'kitchen':
             to_kitchen = True
@@ -123,6 +99,7 @@ class TocMachine(GraphMachine):
 
     def is_going_to_hall(self, event):
         global to_hall
+        to_hall = False
         text = event.message.text
         if (text.lower() == 'hall' or leave_bedroom or leave_sword_room):
             to_hall = True
@@ -151,6 +128,7 @@ class TocMachine(GraphMachine):
 
     def is_going_to_kitchen(self, event):
         global explore_kitchen
+        explore_kitchen = False
         text = event.message.text
         if text.lower() == 'explore':
             explore_kitchen = True
@@ -194,6 +172,7 @@ class TocMachine(GraphMachine):
 
     def is_going_to_sword_room(self, event):
         global to_sword_room
+        to_sword_room = False
         text = event.message.text
         if text.lower() == 'sword room':
             to_sword_room = True
@@ -201,6 +180,7 @@ class TocMachine(GraphMachine):
 
     def is_going_to_armor_room(self, event):
         global to_armor_room
+        to_armor_room = False
         text = event.message.text
         if text.lower() == 'armor room':
             to_armor_room = True
@@ -208,6 +188,7 @@ class TocMachine(GraphMachine):
 
     def is_going_to_bedroom(self, event):
         global to_bedroom
+        to_bedroom = False
         text = event.message.text
         if text.lower() == 'bedroom':
             to_bedroom = True
@@ -215,6 +196,7 @@ class TocMachine(GraphMachine):
 
     def on_enter_sword_room(self, event):
         global have_key, leave_sword_room
+        leave_sword_room = False
         if not have_key:
             text = 'The room is locked.'
             leave_sword_room = True
@@ -270,6 +252,7 @@ class TocMachine(GraphMachine):
 
     def is_going_to_explore_bedroom(self, event):
         global explore_bedroom
+        explore_bedroom = False
         text = event.message.text
         if text == 'explore':
             explore_bedroom = True
@@ -291,6 +274,7 @@ class TocMachine(GraphMachine):
 
     def is_going_to_secret_room(self, event):
         global to_secret_room
+        to_secret_room = False
         text = event.message.text
         if text == 'secret room':
             to_secret_room = True
@@ -317,6 +301,7 @@ class TocMachine(GraphMachine):
 
     def is_going_to_wrong_answer(self, event):
         global wrong_answer
+        wrong_answer = False
         text = event.message.text
         if text == '黑色毛衣' or text == '黑色幽默':
             wrong_answer = True
@@ -324,6 +309,7 @@ class TocMachine(GraphMachine):
 
     def is_going_to_correct_answer(self, event):
         global correct_answer
+        correct_answer = False
         text = event.message.text
         if text == '黑色柳丁':
             correct_answer = True
@@ -344,6 +330,7 @@ class TocMachine(GraphMachine):
     def is_going_to_outside(self, event):
         global to_outside
         global correct_answer
+        to_outside = False
         text = event.message.text
         if text == 'outside!' or correct_answer:
             to_outside = True
@@ -370,6 +357,7 @@ class TocMachine(GraphMachine):
 
     def is_going_to_lawn(self, event):
         global to_lawn
+        to_lawn = False
         text = event.message.text
         if text == "lawn":
             to_lawn = True
@@ -377,6 +365,7 @@ class TocMachine(GraphMachine):
 
     def is_going_to_gate(self, event):
         global to_gate
+        to_gate = False
         text = event.message.text
         if text == "gate":
             to_gate = True
@@ -384,6 +373,7 @@ class TocMachine(GraphMachine):
 
     def is_going_to_warehouse(self, event):
         global to_warehouse
+        to_warehouse = False
         text = event.message.text
         if text == "warehouse":
             to_warehouse = True
@@ -393,6 +383,8 @@ class TocMachine(GraphMachine):
         global have_armor
         global is_dead
         global is_win
+        is_dead = False
+        is_win = False
         if not have_armor:
             text = 'OUCH! There are traps in the lawn.'
             is_dead = True
@@ -407,6 +399,8 @@ class TocMachine(GraphMachine):
         global have_sword
         global is_dead
         global is_win
+        is_dead = False
+        is_win = False
         if not have_sword:
             text = 'There\'s a guard in front of the gate. You have no weapon to fight him.'
             is_dead = True
@@ -465,6 +459,7 @@ class TocMachine(GraphMachine):
 
     def is_going_to_user(self, event):
         global is_restart
+        is_restart = False
         text = event.message.text
         if text == 'yes':
             is_restart = True
