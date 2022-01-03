@@ -68,15 +68,15 @@ class TocMachine(GraphMachine):
         text = 'which way do you want to go?'
         btn = [
             MessageTemplateAction(
-                label='backdoor(right)',
+                label='backdoor',
                 text='backdoor'
             ),
             MessageTemplateAction(
-                label='kitchen(forward)',
+                label='kitchen',
                 text='kitchen'
             ),
             MessageTemplateAction(
-                label='hall(left)',
+                label='hall',
                 text='hall'
             ),
         ]
@@ -161,15 +161,15 @@ class TocMachine(GraphMachine):
         text = 'You\'ve entered the hall. Which way do you want to go?'
         btn = [
             MessageTemplateAction(
-                label='sword room(left)',
+                label='sword room',
                 text='sword room'
             ),
             MessageTemplateAction(
-                label='armor room(forward)',
+                label='armor room',
                 text='armor room'
             ),
             MessageTemplateAction(
-                label='bedroom(right)',
+                label='bedroom',
                 text='bedroom'
             ),
         ]
@@ -215,11 +215,11 @@ class TocMachine(GraphMachine):
             score += 100
             btn = [
                 MessageTemplateAction(
-                    label='There\'s a window, jump outside!',
-                    text='outside!'
+                    label='jump outside',
+                    text='outside'
                 ),
                 MessageTemplateAction(
-                    label='There\'s a secret passage',
+                    label='secret passage',
                     # label='At the corner of the wall, some stones are cracking. Ah-ha! There\'s a secret passage',
                     text='secret room'
                 ),
@@ -234,11 +234,11 @@ class TocMachine(GraphMachine):
         score += 50
         btn = [
             MessageTemplateAction(
-                label='There\'s a window, jump outside!',
+                label='jump outside',
                 text='outside'
             ),
             MessageTemplateAction(
-                label='There\'s a secret passage',
+                label='secret passage',
                 # label='At the corner of the wall, some stones are cracking. Ah-ha! There\'s a secret passage',
                 text='secret room'
             ),
@@ -356,15 +356,15 @@ class TocMachine(GraphMachine):
         text = 'You\'ve reached outside. Which way do you want to go?'
         btn = [
             MessageTemplateAction(
-                label='lawn(left)',
+                label='lawn',
                 text='lawn'
             ),
             MessageTemplateAction(
-                label='gate(forward)',
+                label='gate',
                 text='gate'
             ),
             MessageTemplateAction(
-                label='warehouse(right)',
+                label='warehouse',
                 text='warehouse'
             ),
         ]
@@ -446,7 +446,7 @@ class TocMachine(GraphMachine):
 
     def on_enter_win(self, event):
         global score
-        text = f'Congrats! You WON!\nYour score is {score} points.\nDo you want to start again?'
+        text = f'WON!\nYour score is {score}.\nStart again?'
         btn = [
             MessageTemplateAction(
                 label='yes',
@@ -462,7 +462,7 @@ class TocMachine(GraphMachine):
 
     def on_enter_dead(self, event):
         global score
-        text = f'Sorry! You LOST!\nYour score is {score} points.\nDo you want to start again?'
+        text = f'LOST!\nYour score is {score}.\nStart again?'
         btn = [
             MessageTemplateAction(
                 label='yes',
