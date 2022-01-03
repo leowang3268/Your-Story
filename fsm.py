@@ -46,11 +46,13 @@ class TocMachine(GraphMachine):
     # user start
     def on_enter_user(self, event):
         # initialize global variables
-        global is_dead, is_win, is_restart, score
+        global is_dead, is_win, is_restart, score, have_armor, have_key, have_sword
         is_dead = False
         is_win = False
         is_restart = False
-
+        have_sword = False
+        have_armor = False
+        have_key = False
         score = 0
 
         text = 'Welcome to \"your story\". Type \"start game\" to start the game.'
