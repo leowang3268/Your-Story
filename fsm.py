@@ -97,6 +97,7 @@ class TocMachine(GraphMachine):
         text = event.message.text
         if text.lower() == 'kitchen' or complete_explore_kitchen:
             to_kitchen = True
+        complete_explore_kitchen = False
         return to_kitchen
 
     def is_going_to_hall(self, event):
@@ -138,7 +139,8 @@ class TocMachine(GraphMachine):
 
     def on_enter_explore_kitchen(self, event):
 
-        global score, complete_explore_kitchen
+        global score, complete_explore_kitchen, explore_kitchen
+        explore_kitchen = False
         text = 'You\'ve found a lobster! 50 points get!'
         complete_explore_kitchen = True
         score += 50
@@ -196,6 +198,7 @@ class TocMachine(GraphMachine):
         text = event.message.text
         if text.lower() == 'bedroom' or complete_explore_bedroom:
             to_bedroom = True
+        complete_explore_bedroom = False
         return to_bedroom
 
     def on_enter_sword_room(self, event):
