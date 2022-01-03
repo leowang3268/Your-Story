@@ -104,7 +104,7 @@ class TocMachine(GraphMachine):
         global to_hall, leave_bedroom, leave_sword_room
         to_hall = False
         text = event.message.text
-        if (text.lower() == 'hall' or text.lower() == 'leave'):
+        if (text.lower() == 'hall' or text.lower() == 'leave' or text == 'The room is locked.'):
             to_hall = True
         return to_hall
 
