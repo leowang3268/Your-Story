@@ -331,6 +331,8 @@ class TocMachine(GraphMachine):
         return correct_answer
 
     def on_enter_wrong_answer(self, event):
+        global is_dead
+        is_dead = True
         text = 'Oh No! You made the wrong answer and triggered the trap'
         # url = 'https://st2.depositphotos.com/4464609/6699/v/950/depositphotos_66998681-stock-illustration-guillotine.jpg'
         send_text_message(event.reply_token, text)
