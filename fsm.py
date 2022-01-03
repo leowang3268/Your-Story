@@ -53,6 +53,9 @@ class TocMachine(GraphMachine):
 
         score = 0
 
+        text = 'Welcome to \"your story\". Type \"start game\" to start the game.'
+        send_text_message(event.reply_token, text)
+
     def is_going_to_jail(self, event):
         global to_jail, leave_kitchen, leave_backdoor
         to_jail = False
@@ -350,7 +353,7 @@ class TocMachine(GraphMachine):
         global correct_answer
         to_outside = False
         text = event.message.text
-        if text == 'outside!' or correct_answer:
+        if text == 'outside' or correct_answer:
             to_outside = True
         return to_outside
 
